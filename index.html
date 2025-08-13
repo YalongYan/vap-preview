@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAP播放器Demo</title>
+    <script src="./assets/vap@1.0.5.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .input-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .input-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .input-card h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="file"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .player-section {
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .player-container {
+            width: 400px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #5a6268;
+        }
+
+        .control-btn.primary {
+            background: #28a745;
+        }
+
+        .control-btn.primary:hover {
+            background: #218838;
+        }
+
+        .control-btn.danger {
+            background: #dc3545;
+        }
+
+        .control-btn.danger:hover {
+            background: #c82333;
+        }
+
+        .status {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .status h4 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .status-text {
+            color: #6c757d;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .file-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .file-info h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .file-info p {
+            color: #1565c0;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        .icon-url {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23667eea" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>') no-repeat center;
+        }
+
+        .icon-file {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23667eea" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>') no-repeat center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VAP播放器Demo</h1>
+            <p>支持URL输入和本地文件选择两种方式播放VAP视频</p>
+        </div>
+
+        <div class="content">
+            <div class="input-section">
+                <!-- URL输入方式 -->
+                <div class="input-card">
+                    <h3><span class="icon icon-url"></span>URL方式</h3>
+                    <div class="input-group">
+                        <label for="mp4Url">MP4文件URL:</label>
+                        <input type="text" id="mp4Url" placeholder="请输入MP4文件的URL地址">
+                    </div>
+                    <div class="input-group">
+                        <label for="jsonUrl">JSON配置文件URL:</label>
+                        <input type="text" id="jsonUrl" placeholder="请输入JSON配置文件的URL地址">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="loopUrl" checked>
+                        <label for="loopUrl">循环播放</label>
+                    </div>
+                    <button class="btn" onclick="playByUrl()">播放</button>
+                </div>
+
+                <!-- 本地文件方式 -->
+                <div class="input-card">
+                    <h3><span class="icon icon-file"></span>本地文件方式</h3>
+                    <div class="input-group">
+                        <label for="mp4File">选择MP4文件:</label>
+                        <input type="file" id="mp4File" accept=".mp4,video/mp4">
+                    </div>
+                    <div class="input-group">
+                        <label for="jsonFile">选择JSON配置文件:</label>
+                        <input type="file" id="jsonFile" accept=".json,application/json">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="loopFile" checked>
+                        <label for="loopFile">循环播放</label>
+                    </div>
+                    <button class="btn" onclick="playByFile()">播放</button>
+                </div>
+            </div>
+
+            <!-- 播放器区域 -->
+            <div class="player-section">
+                <div class="player-container" id="playerContainer">
+                    <div>请选择播放方式并点击播放按钮</div>
+                </div>
+            </div>
+
+            <!-- 控制按钮 -->
+            <div class="controls">
+                <button class="control-btn primary" onclick="playVap()">播放</button>
+                <button class="control-btn" onclick="pauseVap()">暂停</button>
+                <button class="control-btn" onclick="resumeVap()">恢复</button>
+                <button class="control-btn danger" onclick="destroyVap()">销毁</button>
+            </div>
+
+            <!-- 状态显示 -->
+            <div class="status">
+                <h4>播放状态</h4>
+                <div class="status-text" id="statusText">未开始播放</div>
+            </div>
+
+            <!-- 文件信息 -->
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <h4>文件信息</h4>
+                <div id="fileInfoContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let vapPlayer = null;
+        let currentConfig = null;
+        let currentUrl = null;
+        let currentLoop = false;
+
+        // 更新状态
+        function updateStatus(message) {
+            document.getElementById('statusText').textContent = message;
+            console.log(message);
+        }
+
+        // 显示文件信息
+        function showFileInfo(info) {
+            const fileInfo = document.getElementById('fileInfo');
+            const fileInfoContent = document.getElementById('fileInfoContent');
+            
+            fileInfoContent.innerHTML = `
+                <p><strong>MP4文件:</strong> ${info.mp4Name}</p>
+                <p><strong>JSON文件:</strong> ${info.jsonName}</p>
+                <p><strong>视频尺寸:</strong> ${info.width} x ${info.height}</p>
+                <p><strong>FPS:</strong> ${info.fps || '未知'}</p>
+            `;
+            
+            fileInfo.style.display = 'block';
+        }
+
+        // 通过URL播放
+        async function playByUrl() {
+            const mp4Url = document.getElementById('mp4Url').value.trim();
+            const jsonUrl = document.getElementById('jsonUrl').value.trim();
+            const loop = document.getElementById('loopUrl').checked;
+
+            if (!mp4Url || !jsonUrl) {
+                alert('请输入MP4和JSON文件的URL');
+                return;
+            }
+
+            try {
+                updateStatus('正在加载配置文件...');
+                
+                // 获取JSON配置
+                const response = await fetch(jsonUrl);
+                if (!response.ok) {
+                    throw new Error('无法加载JSON配置文件');
+                }
+                
+                const config = await response.json();
+                currentConfig = config;
+                currentUrl = mp4Url;
+                currentLoop = loop;
+
+                updateStatus('配置文件加载成功，正在初始化播放器...');
+                
+                // 显示文件信息
+                showFileInfo({
+                    mp4Name: mp4Url.split('/').pop(),
+                    jsonName: jsonUrl.split('/').pop(),
+                    width: config.info?.w || '未知',
+                    height: config.info?.h || '未知',
+                    fps: config.fps
+                });
+
+                // 播放视频
+                await playVap();
+                
+            } catch (error) {
+                updateStatus('播放失败: ' + error.message);
+                console.error('播放失败:', error);
+            }
+        }
+
+        // 通过本地文件播放
+        async function playByFile() {
+            const mp4File = document.getElementById('mp4File').files[0];
+            const jsonFile = document.getElementById('jsonFile').files[0];
+            const loop = document.getElementById('loopFile').checked;
+
+            if (!mp4File || !jsonFile) {
+                alert('请选择MP4和JSON文件');
+                return;
+            }
+
+            try {
+                updateStatus('正在读取文件...');
+                
+                // 读取JSON文件
+                const jsonText = await jsonFile.text();
+                const config = JSON.parse(jsonText);
+                currentConfig = config;
+
+                // 创建MP4文件的URL
+                currentUrl = URL.createObjectURL(mp4File);
+                currentLoop = loop;
+
+                updateStatus('文件读取成功，正在初始化播放器...');
+                
+                // 显示文件信息
+                showFileInfo({
+                    mp4Name: mp4File.name,
+                    jsonName: jsonFile.name,
+                    width: config.info?.w || '未知',
+                    height: config.info?.h || '未知',
+                    fps: config.fps
+                });
+
+                // 播放视频
+                await playVap();
+                
+            } catch (error) {
+                updateStatus('播放失败: ' + error.message);
+                console.error('播放失败:', error);
+            }
+        }
+
+        // 播放VAP
+        async function playVap() {
+            if (!currentConfig || !currentUrl) {
+                alert('请先选择或输入文件');
+                return;
+            }
+
+            try {
+                // 销毁之前的播放器
+                if (vapPlayer) {
+                    vapPlayer.destroy();
+                    vapPlayer = null;
+                }
+
+                updateStatus('正在初始化播放器...');
+
+                const container = document.getElementById('playerContainer');
+                container.innerHTML = '';
+
+                // 创建VAP播放器
+                vapPlayer = new window.Vap.default().play({
+                    container: container,
+                    src: currentUrl,
+                    config: currentConfig,
+                    width: container.clientWidth,
+                    height: container.clientHeight,
+                    loop: currentLoop,
+                    beginPoint: 0,
+                    accurate: true,
+                    onLoadError: (error) => {
+                        updateStatus('加载失败: ' + error);
+                        console.error('VAP加载失败:', error);
+                    }
+                });
+
+                // 绑定事件
+                vapPlayer.on('playing', () => {
+                    updateStatus('正在播放中...');
+                });
+
+                vapPlayer.on('ended', () => {
+                    updateStatus('播放结束');
+                });
+
+                vapPlayer.on('frame', (frame, timestamp) => {
+                    // 可以在这里处理帧数据
+                });
+
+                // 开始播放
+                vapPlayer.play();
+                updateStatus('播放器初始化成功，开始播放');
+                
+            } catch (error) {
+                updateStatus('播放器初始化失败: ' + error.message);
+                console.error('播放器初始化失败:', error);
+            }
+        }
+
+        // 暂停播放
+        function pauseVap() {
+            if (vapPlayer) {
+                vapPlayer.pause();
+                updateStatus('已暂停');
+            } else {
+                updateStatus('没有正在播放的视频');
+            }
+        }
+
+        // 恢复播放
+        function resumeVap() {
+            if (vapPlayer) {
+                vapPlayer.play();
+                updateStatus('已恢复播放');
+            } else {
+                updateStatus('没有可恢复的视频');
+            }
+        }
+
+        // 销毁播放器
+        function destroyVap() {
+            if (vapPlayer) {
+                vapPlayer.destroy();
+                vapPlayer = null;
+                currentConfig = null;
+                currentUrl = null;
+                currentLoop = false;
+                
+                const container = document.getElementById('playerContainer');
+                container.innerHTML = '<div>请选择播放方式并点击播放按钮</div>';
+                
+                document.getElementById('fileInfo').style.display = 'none';
+                updateStatus('播放器已销毁');
+            } else {
+                updateStatus('没有正在播放的视频');
+            }
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('页面加载完成，请选择播放方式');
+            
+            // 检查VAP SDK是否加载
+            if (typeof window.Vap === 'undefined') {
+                updateStatus('VAP SDK加载失败，请检查网络连接');
+            } else {
+                updateStatus('VAP SDK加载成功');
+            }
+        });
+    </script>
+</body>
+</html>
