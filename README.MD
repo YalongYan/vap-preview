@@ -4,6 +4,12 @@
 
 VAP Preview Tool 是一个专业的VAP视频预览工具，支持本地和远程VAP资源的预览和播放。专注于提供流畅的VAP播放体验和便捷的资源管理功能。
 
+## 项目截图
+
+![VAP Preview Demo](https://raw.githubusercontent.com/YalongYan/vap-preview/refs/heads/master/assets/demo.png)
+
+![VAP Preview Demo](https://github.com/YalongYan/vap-preview/blob/master/assets/demo2.png?raw=true)
+
 ## 主要功能
 
 ### 🎯 核心特性
@@ -37,12 +43,6 @@ VAP Preview Tool 是一个专业的VAP视频预览工具，支持本地和远程
 - 异步文件加载，避免UI阻塞
 - 智能错误处理和用户提示
 - 响应式设计，支持多种屏幕尺寸
-
-## 项目截图
-
-![VAP Preview Demo](https://raw.githubusercontent.com/YalongYan/vap-preview/refs/heads/master/assets/demo.png)
-
-![VAP Preview Demo](https://github.com/YalongYan/vap-preview/blob/master/assets/demo2.png?raw=true)
 
 ## 使用场景
 
