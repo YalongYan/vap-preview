@@ -42,6 +42,8 @@ VAP Preview Tool 是一个专业的VAP视频预览工具，支持本地和远程
 
 ![VAP Preview Demo](https://raw.githubusercontent.com/YalongYan/vap-preview/refs/heads/master/assets/demo.png)
 
+![VAP Preview Demo](https://github.com/YalongYan/vap-preview/blob/master/assets/demo2.png?raw=true)
+
 ## 使用场景
 
 - **前端开发**: VAP动画效果预览和调试
@@ -50,13 +52,6 @@ VAP Preview Tool 是一个专业的VAP视频预览工具，支持本地和远程
 - **产品经理**: 动画效果演示和评审
 - **内容创作者**: VAP资源预览和检查
 
-## 技术架构
-
-- **前端技术**: 原生HTML/CSS/JavaScript
-- **VAP引擎**: VAP.js 1.0.5
-- **文件处理**: FileReader API + URL.createObjectURL
-- **异步处理**: Promise + async/await
-- **UI框架**: 原生CSS Grid + Flexbox
 
 ## 使用方法
 
